@@ -27,7 +27,7 @@ import java.util.Locale;
  * @author MiTa
  * @date 2017/12/21.
  */
-public class CalendarSinglePickActivity extends AppCompatActivity{
+public class CalendarSinglePickActivity extends AppCompatActivity {
 
     private final int CALENDAR_TODAY = 77;
 
@@ -41,8 +41,8 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
     private TextView tv_cal_title;
     private ImageView iv_left;
     private ImageView iv_right;
-    private List<DateEntity> list= new ArrayList<>();
-    private int position=0;
+    private List<DateEntity> list = new ArrayList<>();
+    private int position = 0;
     private DateAdapter adapter;
     private ImageView iv_more;
     private int nowmonth;
@@ -64,40 +64,40 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         nowDay = day;
-        nowmonth=month;
+        nowmonth = month;
         calendar.set(year, month, 1);
 
         for (int i = 0; i < 12; i++) {
-                List<DateEntity> deList = new ArrayList<>();
-                MonthEntity monthEntity = new MonthEntity();
-                int maxDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                int empty = calendar.get(Calendar.DAY_OF_WEEK);
-                empty = empty == 1 ? 0 : empty - 1;
-                for (int j = 0; j < empty; j++) {
-                    DateEntity de = new DateEntity();
-                    de.setType(1);
-                    deList.add(de);
+            List<DateEntity> deList = new ArrayList<>();
+            MonthEntity monthEntity = new MonthEntity();
+            int maxDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int empty = calendar.get(Calendar.DAY_OF_WEEK);
+            empty = empty == 1 ? 0 : empty - 1;
+            for (int j = 0; j < empty; j++) {
+                DateEntity de = new DateEntity();
+                de.setType(1);
+                deList.add(de);
+            }
+            for (int j = 1; j <= maxDayOfMonth; j++) {
+                DateEntity de = new DateEntity();
+                if (i == 0) {
+                    de.setType(j < nowDay ? 4 : 0);
+                } else {
+                    de.setType(0);
                 }
-                    for (int j = 1; j <= maxDayOfMonth; j++) {
-                        DateEntity de = new DateEntity();
-                        if (i == 0) {
-                            de.setType(j < nowDay ? 4 : 0);
-                        } else {
-                            de.setType(0);
-                        }
-                        de.setDate(j);
-                        de.setParentPos(i);
-                        de.setDesc(Lunar.getLunarDate(year, month + 1, j));
-                        deList.add(de);
-                    }
-                year = calendar.get(Calendar.YEAR);
-                month = calendar.get(Calendar.MONTH) + 1;
-                monthEntity.setTitle(year + "年" + month + "月");
-                monthEntity.setYear(year);
-                monthEntity.setList(deList);
+                de.setDate(j);
+                de.setParentPos(i);
+                de.setDesc(Lunar.getLunarDate(year, month + 1, j));
+                deList.add(de);
+            }
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH) + 1;
+            monthEntity.setTitle(year + "年" + month + "月");
+            monthEntity.setYear(year);
+            monthEntity.setList(deList);
 
-                monthList.add(monthEntity);
-                calendar.add(Calendar.MONTH, 1);
+            monthList.add(monthEntity);
+            calendar.add(Calendar.MONTH, 1);
 
         }
         tv_cal_title.setText(monthList.get(position).getTitle());
@@ -118,26 +118,26 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
     }
 
     private void getViews() {
-        mRvCalendar =findViewById(R.id.rv_calendar);
-        tv_cal_title=findViewById(R.id.tv_cal_title);
-        iv_left=findViewById(R.id.iv_left);
-        iv_right=findViewById(R.id.iv_right);
-        iv_more=findViewById(R.id.iv_more);
+        mRvCalendar = findViewById(R.id.rv_calendar);
+        tv_cal_title = findViewById(R.id.tv_cal_title);
+        iv_left = findViewById(R.id.iv_left);
+        iv_right = findViewById(R.id.iv_right);
+        iv_more = findViewById(R.id.iv_more);
         iv_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(position>0){
+                if (position > 0) {
                     position--;
                     tv_cal_title.setText(monthList.get(position).getTitle());
                     showAllOrSeven();
-                   // adapter.notifyDataSetChanged();
+                    // adapter.notifyDataSetChanged();
                 }
             }
         });
         iv_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(position<monthList.size()-1){
+                if (position < monthList.size() - 1) {
                     position++;
                     tv_cal_title.setText(monthList.get(position).getTitle());
                     showAllOrSeven();
@@ -149,18 +149,18 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 showAllOrSeven();
-                isShowMore=!isShowMore;
+                isShowMore = !isShowMore;
             }
         });
     }
 
-    private void showAllOrSeven(){
-        if(isShowMore){
+    private void showAllOrSeven() {
+        if (isShowMore) {
             list.clear();
             list.addAll(monthList.get(position).getList());
-        }else{
+        } else {
             list.clear();
-            list.addAll(monthList.get(position).getList().subList(0,7));
+            list.addAll(monthList.get(position).getList().subList(0, 7));
         }
         adapter.notifyDataSetChanged();
     }
@@ -170,13 +170,13 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
      * 本周开始时间戳 - 以星期一为本周的第一天
      */
     public static String getWeekStartTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMdd", Locale. getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         Calendar cal = Calendar.getInstance();
-        int day_of_week = cal.get(Calendar. DAY_OF_WEEK);
-        if (day_of_week == 0 ) {
-            day_of_week = 7 ;
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
+        if (day_of_week == 0) {
+            day_of_week = 7;
         }
-        cal.add(Calendar.DATE , -day_of_week + 1 );
+        cal.add(Calendar.DATE, -day_of_week + 1);
         return simpleDateFormat.format(cal.getTime()) + "000000000";
     }
 
@@ -185,13 +185,13 @@ public class CalendarSinglePickActivity extends AppCompatActivity{
      * 本周结束时间戳 - 以星期一为本周的第一天
      */
     public static String getWeekEndTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMdd", Locale. getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         Calendar cal = Calendar.getInstance();
-        int day_of_week = cal.get(Calendar. DAY_OF_WEEK);
-        if (day_of_week == 0 ) {
-            day_of_week = 7 ;
+        int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
+        if (day_of_week == 0) {
+            day_of_week = 7;
         }
-        cal.add(Calendar.DATE , -day_of_week + 7 );
+        cal.add(Calendar.DATE, -day_of_week + 7);
         return simpleDateFormat.format(cal.getTime()) + "235959999";
     }
 
