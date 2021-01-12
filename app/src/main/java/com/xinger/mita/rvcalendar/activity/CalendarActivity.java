@@ -36,7 +36,7 @@ public class CalendarActivity extends AppCompatActivity implements MonthAdapter.
     private List<Integer> selectMonth = new ArrayList<>();
     private List<Integer> selectDate = new ArrayList<>();
     private boolean selectComplete;
-
+    private CalendarView calendar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +45,13 @@ public class CalendarActivity extends AppCompatActivity implements MonthAdapter.
 //        getViews();
 //        initData();
 //        initRv();
+        calendar=(CalendarView)findViewById(R.id.calendar);
+        calendar.setOnIndicatorChangeListener(new CalendarView.OnIndicatorChangeListener() {
+            @Override
+            public void onIndicatorChange(int position) {
+
+            }
+        });
     }
 
     private void initData() {

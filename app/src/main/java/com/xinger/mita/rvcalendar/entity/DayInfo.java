@@ -29,6 +29,15 @@ public class DayInfo {
 
     private Week week;
     private int day;
+    private String timeData;
+
+    public String getTimeData() {
+        return timeData;
+    }
+
+    public void setTimeData(String timeData) {
+        this.timeData = timeData;
+    }
 
     @Override
     public String toString() {
