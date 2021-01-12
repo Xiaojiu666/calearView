@@ -6,13 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.xinger.mita.rvcalendar.R;
 import com.xinger.mita.rvcalendar.adapter.MonthAdapter;
 import com.xinger.mita.rvcalendar.entity.DateEntity;
 import com.xinger.mita.rvcalendar.entity.MonthEntity;
-import com.xinger.mita.rvcalendar.utils.CalendarProxy;
 import com.xinger.mita.rvcalendar.utils.Lunar;
+import com.xinger.mita.rvcalendar.activity.CalendarView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,17 +38,22 @@ public class CalendarActivity extends AppCompatActivity implements MonthAdapter.
     private List<Integer> selectMonth = new ArrayList<>();
     private List<Integer> selectDate = new ArrayList<>();
     private boolean selectComplete;
-    private CalendarView calendar;
+    private CalendarView calendarView;
+    private LinearLayout layout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_1);
-        new CalendarProxy();
-//        getViews();
-//        initData();
-//        initRv();
-        calendar=(CalendarView)findViewById(R.id.calendar);
-        calendar.setOnIndicatorChangeListener(new CalendarView.OnIndicatorChangeListener() {
+        calendarView = (CalendarView) findViewById(R.id.calendarView);
+        layout = (LinearLayout) findViewById(R.id.layout);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        calendarView.setOnIndicatorChangeListener(new CalendarView.OnIndicatorChangeListener() {
             @Override
             public void onIndicatorChange(int position) {
 
