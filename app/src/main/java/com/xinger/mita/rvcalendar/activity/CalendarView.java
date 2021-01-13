@@ -44,12 +44,13 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
     public ImageView reduceMonth, addMonth, controlIv;
     private int currentYear, currentMonth, currentDay;
     private DayAdapter dayAdapter;
-    private String startTimeData="111";
-    private String endTimeData="111";
+    private String startTimeData = "111";
+    private String endTimeData = "111";
     private boolean openStatus = true;
     private List<DayInfo> dayInfos1;
     //定义一个接口对象listerner
     public OnIndicatorChangeListener onIndicatorChangeListener;
+
     public CalendarView(Context context) {
         this(context, null);
     }
@@ -72,6 +73,7 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         controlIv.setOnClickListener(this);
         reduceMonth.setOnClickListener(this);
         initBaseData();
+
         initBaseView();
     }
 
@@ -84,6 +86,7 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
 
     @SuppressLint("DefaultLocale")
     private void initBaseView() {
+        Log.i(TAG, Log.getStackTraceString(new Throwable()));
         calendarTitle.setText(String.format("%d年%d月", currentYear, currentMonth));
         calendarWeekRv.setLayoutManager(new GridLayoutManager(getContext(), 7));
         calendarDaysRv.setLayoutManager(new GridLayoutManager(getContext(), 7));
@@ -128,21 +131,21 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
 
     public void close(List<DayInfo> dayInfos) {
         if (currentMonth == calendarProxy.getCalendarMonth()) {
-            int i = currentDay / 7;
+            int i = (currentDay + queryLastMonthDaysInMonth()) / 7;
             dayInfos1 = dayInfos.subList(i * 7, i * 7 + 7);
             dayAdapter.upDateList(dayInfos1);
         } else {
             dayInfos1 = dayInfos.subList(0, 7);
             dayAdapter.upDateList(dayInfos1);
         }
-        for (int i=0;i<dayInfos1.size();i++){
-            Log.e("缩放",dayInfos1.get(i).getDay()+"");
-            if(dayInfos1.get(i).getDay()>0){
-                startTimeData=timeToStamp(currentYear+"-"+currentMonth+"-"+dayInfos1.get(i).getDay());
+        for (int i = 0; i < dayInfos1.size(); i++) {
+            Log.e("缩放", dayInfos1.get(i).getDay() + "");
+            if (dayInfos1.get(i).getDay() > 0) {
+                startTimeData = timeToStamp(currentYear + "-" + currentMonth + "-" + dayInfos1.get(i).getDay());
                 return;
             }
         }
-        endTimeData=timeToStamp(currentYear+"-"+currentMonth+"-"+dayInfos1.get(dayInfos1.size()-1).getDay());
+        endTimeData = timeToStamp(currentYear + "-" + currentMonth + "-" + dayInfos1.get(dayInfos1.size() - 1).getDay());
     }
 
     public List<DayInfo> queryDays4YearMonth() {
@@ -150,15 +153,36 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         calendarTitle.setText(String.format("%d年%d月", currentYear, currentMonth));
         List<DayInfo> day4YearMonth = calendarProxy.getDay4YearMonth(currentYear, currentMonth, false);
         Log.e(TAG, "day4YearMonth" + day4YearMonth.size());
-        for (int i=0;i<day4YearMonth.size();i++){
-            if(day4YearMonth.get(i).getDay()>0){
-                day4YearMonth.get(i).setTimeData(timeToStamp(currentYear+"-"+currentMonth+"-"+day4YearMonth.get(i).getDay()));
-                Log.e(TAG, "设置时间戳" +currentYear+"-"+currentMonth+"-"+day4YearMonth.get(i).getDay()+"================"+ day4YearMonth.get(i).getTimeData());
+        for (int i = 0; i < day4YearMonth.size(); i++) {
+            if (day4YearMonth.get(i).getDay() > 0) {
+                day4YearMonth.get(i).setTimeData(timeToStamp(currentYear + "-" + currentMonth + "-" + day4YearMonth.get(i).getDay()));
+                Log.e(TAG, "设置时间戳" + currentYear + "-" + currentMonth + "-" + day4YearMonth.get(i).getDay() + "================" + day4YearMonth.get(i).getTimeData());
             }
         }
-        startTimeData=timeToStamp(currentYear+"-"+currentMonth+"-"+1);
-        endTimeData=timeToStamp(currentYear+"-"+currentMonth+"-"+day4YearMonth.get(day4YearMonth.size()-1).getDay());
+        startTimeData = timeToStamp(currentYear + "-" + currentMonth + "-" + 1);
+        endTimeData = timeToStamp(currentYear + "-" + currentMonth + "-" + day4YearMonth.get(day4YearMonth.size() - 1).getDay());
         return day4YearMonth;
+    }
+
+    /**
+     * 查询上个月在本月多出的天数
+     *
+     * @return
+     */
+    public int queryLastMonthDaysInMonth() {
+        int daySize = 0;
+        List<DayInfo> monthDays = queryDays4YearMonth();
+        if (monthDays == null) {
+            return daySize;
+        }
+        for (DayInfo dayInfo :
+                monthDays) {
+            if (dayInfo.getDay() < 1) {
+                daySize += 1;
+            }
+        }
+        Log.i(TAG, "queryLastMonthDaysInMonth : " + daySize);
+        return daySize;
     }
 
 
@@ -193,7 +217,7 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
             e.printStackTrace();
         }
         timeStemp = d.getTime();
-        return timeStemp+"";
+        return timeStemp + "";
     }
 
 
